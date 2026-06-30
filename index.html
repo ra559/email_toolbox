@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Email Toolbox</title>
+
+  <!-- Bulma -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+
+  <!-- Open source font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<section class="section">
+<div class="container">
+
+<div class="columns is-centered">
+<div class="column is-10-tablet is-8-desktop">
+
+  <!-- Header -->
+  <div class="level mb-5">
+    <div class="level-left">
+      <div>
+        <h1 class="title is-3">Email Toolbox</h1>
+        <p class="subtitle is-6">Small tools for daily email work — runs entirely in your browser</p>
+      </div>
+    </div>
+    <div class="level-right">
+      <button class="button is-small" id="themeBtn">🌙 Theme</button>
+    </div>
+  </div>
+
+
+  <!-- Tool 1: MIME Encoded-Word -->
+  <div class="card app-card mb-5">
+    <div class="card-content">
+
+      <div class="level mb-4">
+        <div class="level-left">
+          <h2 class="title is-5 mb-0">MIME Encoded-Word (Q-encoding)</h2>
+        </div>
+        <div class="level-right">
+          <span class="tag is-info is-light tool-mode" id="ew-mode">Auto</span>
+        </div>
+      </div>
+
+      <p class="help mb-4">
+        Paste plain text to <strong>encode</strong>, or paste an
+        <code>=?UTF-8?Q?…?=</code> / <code>=?…?B?…?=</code> string to
+        <strong>decode</strong>. Detection is automatic.
+      </p>
+
+      <div class="field">
+        <label class="label">Input</label>
+        <div class="control">
+          <textarea class="textarea" id="ew-input" rows="3"
+            placeholder="Café ☕  →  =?UTF-8?Q?...?="></textarea>
+        </div>
+      </div>
+
+      <div class="buttons mt-4 mb-4">
+        <button class="button is-primary" id="ew-convert">Convert</button>
+        <button class="button is-info" id="ew-copy">Copy</button>
+        <button class="button" id="ew-clear">Clear</button>
+      </div>
+
+      <div class="field">
+        <label class="label">Output</label>
+        <div class="control">
+          <textarea class="textarea" id="ew-output" rows="3"
+            readonly placeholder="Result appears here"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Tool 2: Base64 -->
+  <div class="card app-card">
+    <div class="card-content">
+
+      <div class="level mb-4">
+        <div class="level-left">
+          <h2 class="title is-5 mb-0">Base64 Converter</h2>
+        </div>
+        <div class="level-right">
+          <span class="tag is-info is-light tool-mode" id="b64-mode">Auto</span>
+        </div>
+      </div>
+
+      <p class="help mb-4">
+        Useful for converting Outlook emails to plaintext. Paste text to
+        <strong>encode</strong>, or paste Base64 to <strong>decode</strong>.
+        Use the toggle if auto-detection guesses wrong.
+      </p>
+
+      <div class="field">
+        <label class="label">Input</label>
+        <div class="control">
+          <textarea class="textarea" id="b64-input" rows="4"
+            placeholder="Plain text  ↔  SGVsbG8="></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Direction</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="b64-direction">
+              <option value="auto">Auto-detect</option>
+              <option value="encode">Force encode</option>
+              <option value="decode">Force decode</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="buttons mt-4 mb-4">
+        <button class="button is-primary" id="b64-convert">Convert</button>
+        <button class="button is-info" id="b64-copy">Copy</button>
+        <button class="button" id="b64-clear">Clear</button>
+      </div>
+
+      <div class="field">
+        <label class="label">Output</label>
+        <div class="control">
+          <textarea class="textarea" id="b64-output" rows="4"
+            readonly placeholder="Result appears here"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+</div>
+</section>
+
+<script src="app.js"></script>
+
+</body>
+</html>

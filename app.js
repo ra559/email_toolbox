@@ -179,6 +179,120 @@ function runBase64() {
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * Tool 3: JSON Formatter (collapsible tree)
+ * ------------------------------------------------------------------ */
+
+let jsonData; // last successfully parsed payload, for the Copy button
+
+function jsonType(v) {
+  if (v === null) return 'null';
+  if (Array.isArray(v)) return 'array';
+  return typeof v; // object, string, number, boolean
+}
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function primitiveText(value, type) {
+  if (type === 'string') return JSON.stringify(value);
+  if (type === 'null') return 'null';
+  return String(value);
+}
+
+// Build a DOM node for one entry. `key` is null for array items / root.
+function buildEntry(key, value, isLast) {
+  const type = jsonType(value);
+  const node = el('div', 'json-node');
+  const line = el('div', 'json-line');
+  const comma = isLast ? '' : ',';
+
+  const toggle = el('span', 'json-toggle');
+  line.appendChild(toggle);
+
+  if (key !== null) {
+    line.appendChild(el('span', 'json-key', JSON.stringify(key)));
+    line.appendChild(el('span', 'json-punct', ': '));
+  }
+
+  if (type === 'object' || type === 'array') {
+    const entries = type === 'array'
+      ? value.map((v, i) => [i, v])
+      : Object.entries(value);
+    const openB = type === 'array' ? '[' : '{';
+    const closeB = type === 'array' ? ']' : '}';
+
+    line.appendChild(el('span', 'json-bracket', openB));
+
+    if (entries.length > 0) {
+      node.classList.add('togglable');
+      line.appendChild(el('span', 'json-preview', ' … '));
+      line.appendChild(el('span', 'json-count',
+        `${entries.length} ${type === 'array' ? 'items' : 'keys'}`));
+      line.appendChild(el('span', 'json-bracket json-close-inline', closeB + comma));
+
+      const children = el('div', 'json-children');
+      entries.forEach(([k, v], i) => {
+        children.appendChild(buildEntry(
+          type === 'array' ? null : k, v, i === entries.length - 1));
+      });
+
+      node.appendChild(line);
+      node.appendChild(children);
+      node.appendChild(el('div', 'json-close-block', closeB + comma));
+
+      line.addEventListener('click', () => {
+        if (window.getSelection().toString()) return; // don't fight text selection
+        node.classList.toggle('collapsed');
+      });
+    } else {
+      // empty {} or []
+      line.appendChild(el('span', 'json-bracket', closeB + comma));
+      node.appendChild(line);
+    }
+  } else {
+    const v = el('span', 'json-value json-' + type, primitiveText(value, type) + comma);
+    line.appendChild(v);
+    node.appendChild(line);
+  }
+
+  return node;
+}
+
+function runJSON() {
+  const input = $('json-input').value;
+  const out = $('json-output');
+  const mode = $('json-mode');
+  out.innerHTML = '';
+
+  if (!input.trim()) {
+    jsonData = undefined;
+    out.appendChild(el('span', 'placeholder', 'Formatted output appears here'));
+    setMode(mode, 'Idle');
+    return;
+  }
+
+  try {
+    jsonData = JSON.parse(input);
+    out.appendChild(buildEntry(null, jsonData, true));
+    setMode(mode, 'Valid');
+  } catch (e) {
+    jsonData = undefined;
+    out.appendChild(el('div', 'json-error', 'Invalid JSON: ' + e.message));
+    setMode(mode, 'Invalid', false);
+  }
+}
+
+function setAllCollapsed(collapsed) {
+  $('json-output').querySelectorAll('.json-node.togglable').forEach((n) => {
+    n.classList.toggle('collapsed', collapsed);
+  });
+}
+
 // ----- Theme toggle (matches loremgen) -----
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
@@ -212,4 +326,18 @@ document.addEventListener('DOMContentLoaded', () => {
     $('b64-input').value = '';
     runBase64();
   });
+
+  // JSON Formatter
+  $('json-format').addEventListener('click', runJSON);
+  $('json-expand').addEventListener('click', () => setAllCollapsed(false));
+  $('json-collapse').addEventListener('click', () => setAllCollapsed(true));
+  $('json-copy').addEventListener('click', () => {
+    if (jsonData === undefined) return;
+    navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2)).catch(() => {});
+  });
+  $('json-clear').addEventListener('click', () => {
+    $('json-input').value = '';
+    runJSON();
+  });
+  runJSON(); // show placeholder on load
 });

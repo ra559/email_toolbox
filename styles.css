@@ -6,6 +6,14 @@
 --text:#222;
 --border:#ddd;
 
+--json-key:#7c3aed;
+--json-string:#22863a;
+--json-number:#005cc5;
+--json-bool:#d73a49;
+--json-null:#6a737d;
+--json-punct:#57606a;
+--json-hover:rgba(0,0,0,.04);
+
 }
 
 
@@ -16,6 +24,14 @@
 
 --text:#ececec;
 --border:#3a3a3a;
+
+--json-key:#c792ea;
+--json-string:#c3e88d;
+--json-number:#82aaff;
+--json-bool:#f78c6c;
+--json-null:#9aa0a6;
+--json-punct:#8a919a;
+--json-hover:rgba(255,255,255,.06);
 
 }
 
@@ -81,6 +97,135 @@ resize:none;
 .tool-mode{
 
 align-self:center;
+
+}
+
+
+/* ---- JSON tree ---- */
+
+.json-tree{
+
+background:var(--card);
+color:var(--text);
+
+border:1px solid var(--border);
+border-radius:6px;
+
+padding:.75rem 1rem;
+
+font-family:monospace;
+font-size:.9rem;
+line-height:1.5;
+
+max-height:32rem;
+overflow:auto;
+
+white-space:nowrap;
+
+}
+
+.json-tree .placeholder{
+
+color:var(--json-null);
+white-space:normal;
+
+}
+
+.json-line{
+
+cursor:default;
+border-radius:4px;
+
+}
+
+.json-node.togglable > .json-line{
+
+cursor:pointer;
+
+}
+
+.json-node.togglable > .json-line:hover{
+
+background:var(--json-hover);
+
+}
+
+.json-children{
+
+padding-left:1.5em;
+
+}
+
+.json-toggle{
+
+display:inline-block;
+width:1em;
+
+color:var(--json-punct);
+user-select:none;
+
+}
+
+.json-node.togglable > .json-line .json-toggle::before{
+
+content:"\25BE"; /* ▾ */
+
+}
+
+.json-node.togglable.collapsed > .json-line .json-toggle::before{
+
+content:"\25B8"; /* ▸ */
+
+}
+
+.json-node.collapsed > .json-children,
+.json-node.collapsed > .json-close-block{
+
+display:none;
+
+}
+
+.json-preview,
+.json-close-inline{
+
+display:none;
+
+}
+
+.json-node.collapsed > .json-line .json-preview,
+.json-node.collapsed > .json-line .json-close-inline{
+
+display:inline;
+
+}
+
+.json-count{
+
+color:var(--json-null);
+font-style:italic;
+display:none;
+
+}
+
+.json-node.collapsed > .json-line .json-count{
+
+display:inline;
+
+}
+
+.json-key{ color:var(--json-key); }
+.json-bracket,
+.json-preview,
+.json-punct{ color:var(--json-punct); }
+.json-string{ color:var(--json-string); }
+.json-number{ color:var(--json-number); }
+.json-boolean{ color:var(--json-bool); }
+.json-null{ color:var(--json-null); }
+
+.json-error{
+
+color:var(--json-bool);
+white-space:normal;
 
 }
 

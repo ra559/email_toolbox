@@ -88,7 +88,7 @@
 
 
   <!-- Tool 2: Base64 -->
-  <div class="card app-card">
+  <div class="card app-card mb-5">
     <div class="card-content">
 
       <div class="level mb-4">
@@ -138,6 +138,52 @@
         <div class="control">
           <textarea class="textarea" id="b64-output" rows="4"
             readonly placeholder="Result appears here"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Tool 3: JSON Formatter -->
+  <div class="card app-card">
+    <div class="card-content">
+
+      <div class="level mb-4">
+        <div class="level-left">
+          <h2 class="title is-5 mb-0">JSON Formatter</h2>
+        </div>
+        <div class="level-right">
+          <span class="tag is-info is-light tool-mode" id="json-mode">Idle</span>
+        </div>
+      </div>
+
+      <p class="help mb-4">
+        Paste a JSON payload and format it. Click any
+        <span class="json-bracket">{ }</span> or
+        <span class="json-bracket">[ ]</span> to expand or collapse it.
+      </p>
+
+      <div class="field">
+        <label class="label">Input</label>
+        <div class="control">
+          <textarea class="textarea" id="json-input" rows="5"
+            placeholder='{"hello": "world", "items": [1, 2, 3]}'></textarea>
+        </div>
+      </div>
+
+      <div class="buttons mt-4 mb-4">
+        <button class="button is-primary" id="json-format">Format</button>
+        <button class="button" id="json-expand">Expand all</button>
+        <button class="button" id="json-collapse">Collapse all</button>
+        <button class="button is-info" id="json-copy">Copy</button>
+        <button class="button" id="json-clear">Clear</button>
+      </div>
+
+      <div class="field">
+        <label class="label">Output</label>
+        <div class="control">
+          <div class="json-tree" id="json-output"></div>
         </div>
       </div>
 

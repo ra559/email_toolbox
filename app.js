@@ -293,6 +293,31 @@ function setAllCollapsed(collapsed) {
   });
 }
 
+/* ------------------------------------------------------------------ *
+ * Tool 4: URL percent-encoding
+ * ------------------------------------------------------------------ */
+
+function runURL(decode) {
+  const input = $('url-input').value;
+  const out = $('url-output');
+  const mode = $('url-mode');
+
+  if (!input) {
+    out.value = '';
+    setMode(mode, 'Idle');
+    return;
+  }
+
+  try {
+    out.value = decode ? decodeURIComponent(input) : encodeURIComponent(input);
+    setMode(mode, decode ? 'Decoded' : 'Encoded');
+  } catch (e) {
+    // decodeURIComponent throws URIError on malformed sequences like "%zz"
+    out.value = 'Error: ' + e.message;
+    setMode(mode, 'Error', false);
+  }
+}
+
 // ----- Theme toggle (matches loremgen) -----
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
@@ -340,4 +365,14 @@ document.addEventListener('DOMContentLoaded', () => {
     runJSON();
   });
   runJSON(); // show placeholder on load
+
+  // URL encoding
+  $('url-encode').addEventListener('click', () => runURL(false));
+  $('url-decode').addEventListener('click', () => runURL(true));
+  $('url-copy').addEventListener('click', () => copyToClipboard($('url-output')));
+  $('url-clear').addEventListener('click', () => {
+    $('url-input').value = '';
+    $('url-output').value = '';
+    setMode($('url-mode'), 'Idle');
+  });
 });
